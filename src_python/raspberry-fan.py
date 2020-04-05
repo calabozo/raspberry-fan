@@ -5,11 +5,11 @@ import time
 
 from gpiozero import OutputDevice
 
-ON_FULL_THRESHOLD = 75
+ON_FULL_THRESHOLD = 65
 ON_LOW_THRESHOLD = 65  # (degrees Celsius) Fan kicks on at this temperature.
 OFF_THRESHOLD = 55  # (degress Celsius) Fan shuts off at this temperature.
 TEMP_INTERVAL = 5  # (seconds) How often we check the core temperature.
-SLEEP_INTERVAL = 0.01
+SLEEP_INTERVAL = 0.008
 
 
 class FanController():
@@ -69,9 +69,10 @@ if __name__ == '__main__':
             print("off")
 
         if fan_controller.is_fan_on():
-            if temp > ON_FULL_THRESHOLD:
-                fan_controller.swith_on_for_cycle(SLEEP_INTERVAL,0)
+            if temp >= ON_FULL_THRESHOLD:
+                fan_controller.swith_on_for_cycle(TEMP_INTERVAL/2,0)
             else:
-                fan_controller.swith_on_for_cycle(0.05,SLEEP_INTERVAL)
+                fan_controller.swith_on_for_cycle(TEMP_INTERVAL/2,0)
+                #fan_controller.swith_on_for_cycle(0.05,SLEEP_INTERVAL)
         else:
             time.sleep(TEMP_INTERVAL)
